@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1564355731 source:c:\users\lenovo\pycharmprojects\proyecto-final-\ajedrez\main.c
+	<stdio.h>
+	<ctype.h>
+
