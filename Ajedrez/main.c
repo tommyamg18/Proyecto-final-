@@ -4,8 +4,20 @@ char tablero[8][8];
 void posicion_inicial();
 void juego();
 void imprimir_tablero();
+int validar_(int i_inicial,int j_inicial,int i_final,int j_final);
+void imprimir_jugador(int turno);
 void leer_jugada(int *i_inicial, int *j_inicial,int *i_final,int *j_final,char turno);
 void mover_pieza(int i_inicial, int j_inicial, int i_final, int j_final);
+int confirmar_peon_blanco(int i_inicial,int j_inicial,int i_final,int j_final);
+int confirmar_peon_negro(int i_inicial,int j_inicial,int i_final,int j_final);
+int confirmar_rey_blanco(int i_inicial,int j_inicial,int i_final,int j_final);
+int confirmar_rey_negro(int i_inicial,int j_inicial,int i_final,int j_final);
+int confirmar_caballo_negro(int i_inicial,int j_inicial,int i_final,int j_final);
+int confirmar_caballo_blanco(int i_inicial,int j_inicial,int i_final,int j_final);
+int confirmar_torre_blanca(int i_inicial,int j_inicial,int i_final,int j_final);
+int confirmar_torre_negra(int i_inicial,int j_inicial,int i_final,int j_final);
+int confirmar_alfil_negro(int i_inicial,int j_inicial,int i_final,int j_final);
+int confirmar_alfil_blanco(int i_inicial,int j_inicial,int i_final,int j_final);
 int main() {
     posicion_inicial();
     juego();
@@ -14,6 +26,7 @@ void juego()
 {
     int i_inicial, j_inicial,turno=0;
     int i_final,j_final,aux;
+    char help;
     do
     {
         imprimir_tablero();
@@ -24,8 +37,31 @@ void juego()
         {
             mover_pieza(i_inicial,j_inicial,i_final,j_final);
             turno=1-turno;
-        }
-        else if(aux==0)
+        } else if((aux==-1)&&(turno==0))
+        {
+            do{
+            printf("\nDigite la pieza por la que desea sustituir \n");
+            scanf(" %c",&help);
+            if(help=='t'||help=='c'||help=='a'||help=='r'||help=='d'||help=='c'){
+            tablero[i_final][j_final]=help;
+            turno=1-turno;
+            break;
+            }
+            }while(help!='t'||help!='c'||help!='a'||help!='r'||help!='d'||help!='c');
+
+        } else if((aux==-1)&&(turno==1))
+        {
+            do{
+            printf("\nDigite la pieza por la que desea sustituir \n");
+            scanf(" %c",&help);
+            if(help=='T'||help=='C'||help=='A'||help=='R'||help=='D'){
+            tablero[i_final][j_final]=help;
+            turno=1-turno;
+            break;
+            }
+            }while(help!='T'||help!='C'||help!='A'||help!='R'||help!='D');
+
+        }else if(aux==0)
         {
             printf("\njugada no valida");
         }
@@ -34,42 +70,1246 @@ void juego()
 }
 int validar_(int i_inicial,int j_inicial,int i_final,int j_final)
 {
-//    if(tablero[i_inicial][j_inicial]=='t'||tablero[i_inicial][j_inicial]=='T')
-//    return confirmar_torre(i_inicial,j_inicial,i_final,j_final);
-//
-//    if(tablero[i_inicial][j_inicial]=='a'||tablero[i_inicial][j_inicial]=='A')
-//    return confirmar_alfil(i_inicial,j_inicial,i_final,j_final);
-//
-//    if(tablero[i_inicial][j_inicial]=='c'||tablero[i_inicial][j_inicial]=='C')
-//    return confirmar_caballo(i_inicial,j_inicial,i_final,j_final);
-//
-//    if(tablero[i_inicial][j_inicial]=='d'||tablero[i_inicial][j_inicial]=='D')
-//    return confirmar_dama(i_inicial,j_inicial,i_final,j_final);
-//
-//    if(tablero[i_inicial][j_inicial]=='r'||tablero[i_inicial][j_inicial]=='R')
-//    return confirmar_rey(i_inicial,j_inicial,i_final,j_final);
+    if((i_inicial>7)||(i_inicial<0)||(j_inicial>7)||(j_inicial<0)||(i_final>7)|| (i_final<0)||(j_final>7)||(j_final<0))
+        return 0;
+    if(tablero[i_inicial][j_inicial]=='d'||tablero[i_inicial][j_inicial]=='D')
+    return confirmar_dama_blanca(i_inicial,j_inicial,i_final,j_final);
+
+    if(tablero[i_inicial][j_inicial]=='D')
+    return confirmar_dama_negra(i_inicial,j_inicial,i_final,j_final);
+
+    if(tablero[i_inicial][j_inicial]=='t')
+    return confirmar_torre_blanca(i_inicial,j_inicial,i_final,j_final);
+
+    if(tablero[i_inicial][j_inicial]=='T')
+    return confirmar_torre_negra(i_inicial,j_inicial,i_final,j_final);
+
+    if(tablero[i_inicial][j_inicial]=='A')
+    return confirmar_alfil_negro(i_inicial,j_inicial,i_final,j_final);
+
+    if(tablero[i_inicial][j_inicial]=='a')
+    return confirmar_alfil_blanco(i_inicial,j_inicial,i_final,j_final);
+
+
+    if(tablero[i_inicial][j_inicial]=='c')
+    return confirmar_caballo_blanco(i_inicial,j_inicial,i_final,j_final);
+
+    if(tablero[i_inicial][j_inicial]=='C')
+    return confirmar_caballo_negro(i_inicial,j_inicial,i_final,j_final);
+
+
+
+    if(tablero[i_inicial][j_inicial]=='r')
+    return confirmar_rey_blanco(i_inicial,j_inicial,i_final,j_final);
+
+    if(tablero[i_inicial][j_inicial]=='R')
+    return confirmar_rey_negro(i_inicial,j_inicial,i_final,j_final);
+
 
     if(tablero[i_inicial][j_inicial]=='p')
     return confirmar_peon_blanco(i_inicial,j_inicial,i_final,j_final);
+
     if(tablero[i_inicial][j_inicial]=='P')
     return confirmar_peon_negro(i_inicial,j_inicial,i_final,j_final);
+    return 0;
 
+}
+int confirmar_dama_negra(int i_inicial,int j_inicial,int i_final,int j_final)
+{
+    int i;
+    for(i=1;i<8;i++){
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='P'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='R'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='T'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='A'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='C'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='D'))
+        return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='P'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='R'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='T'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='A'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='C'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='D'))
+        return 0;
+    }
+
+    for(i=1;i<8;i++){
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='P'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='R'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='T'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='A'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='C'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='D'))
+        return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='P'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='R'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='T'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='A'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='C'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='D'))
+        return 0;
+    }
+
+   for(i=1;i<8;i++){
+    if((i_inicial)==(i_final)&&((j_inicial-i)==j_final))
+        return 1;
+    if((i_inicial)==(i_final)&&((j_inicial+i)==j_final))
+        return 1;
+    if((i_inicial-i)==(i_final)&&((j_inicial)==j_final))
+        return 1;
+    if((i_inicial+i)==(i_final)&&((j_inicial)==j_final))
+        return 1;
+    }
+
+}
+int confirmar_torre_blanca(int i_inicial,int j_inicial,int i_final,int j_final)
+{
+    int i;
+    for(i=1;i<8;i++){
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='p'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='r'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='t'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='a'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='c'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='d'))
+        return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='p'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='r'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='t'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='a'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='c'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='d'))
+        return 0;
+    }
+
+    for(i=1;i<8;i++){
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='p'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='r'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='t'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='a'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='c'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='d'))
+        return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='p'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='r'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='t'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='a'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='c'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='d'))
+        return 0;
+    }
+   for(i=1;i<8;i++){
+    if((i_inicial)==(i_final)&&((j_inicial-i)==j_final))
+        return 1;
+    if((i_inicial)==(i_final)&&((j_inicial+i)==j_final))
+        return 1;
+    if((i_inicial-i)==(i_final)&&((j_inicial)==j_final))
+        return 1;
+    if((i_inicial+i)==(i_final)&&((j_inicial)==j_final))
+        return 1;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='P'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='R'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='T'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='A'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='C'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='D'))
+    return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='P'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='R'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='T'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='A'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='C'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='D'))
+    return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='P'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='R'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='T'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='A'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='C'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='D'))
+    return 0;
+    }
+    for( i=1;i<8;i++){
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='P'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='R'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='T'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='A'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='C'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='D'))
+    return 0;
+    }
+    for(i=1;i<8;i++){
+    if((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)
+    return 1;
+    if((i_inicial+i)==i_final&&(j_inicial+i)==j_final)
+    return 1;
+    if((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)
+    return 1;
+    if((i_inicial-i)==i_final&&(j_inicial+i)==j_final)
+    return 1;
+    }
+    return 0;
+}
+int confirmar_torre_negra(int i_inicial,int j_inicial,int i_final,int j_final)
+{
+    int i;
+    for(i=1;i<8;i++){
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='P'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='R'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='T'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='A'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='C'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='D'))
+        return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='P'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='R'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='T'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='A'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='C'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='D'))
+        return 0;
+    }
+
+    for(i=1;i<8;i++){
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='P'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='R'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='T'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='A'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='C'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='D'))
+        return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='P'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='R'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='T'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='A'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='C'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='D'))
+        return 0;
+    }
+   for(i=1;i<8;i++){
+    if((i_inicial)==(i_final)&&((j_inicial-i)==j_final))
+        return 1;
+    if((i_inicial)==(i_final)&&((j_inicial+i)==j_final))
+        return 1;
+    if((i_inicial-i)==(i_final)&&((j_inicial)==j_final))
+        return 1;
+    if((i_inicial+i)==(i_final)&&((j_inicial)==j_final))
+        return 1;
+    }
+    return 0;
+}
+int confirmar_alfil_negro(int i_inicial,int j_inicial,int i_final,int j_final)
+{
+    int i;
+    for(i=1;i<8;i++){
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='P'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='R'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='T'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='A'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='C'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='D'))
+    return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='P'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='R'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='T'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='A'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='C'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='D'))
+    return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='P'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='R'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='T'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='A'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='C'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='D'))
+    return 0;
+    }
+    for( i=1;i<8;i++){
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='P'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='R'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='T'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='A'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='C'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='D'))
+    return 0;
+    }
+    for(i=1;i<8;i++){
+    if((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)
+    return 1;
+    if((i_inicial+i)==i_final&&(j_inicial+i)==j_final)
+    return 1;
+    if((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)
+    return 1;
+    if((i_inicial-i)==i_final&&(j_inicial+i)==j_final)
+    return 1;
+    }
+    return 0;
+}
+int confirmar_alfil_blanco(int i_inicial,int j_inicial,int i_final,int j_final)
+{
+    int i;
+    for(i=1;i<8;i++){
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='p'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='r'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='t'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='a'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='c'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='d'))
+    return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='p'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='r'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='t'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='a'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='c'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='d'))
+    return 0;
+    }
+
+    for(i=1;i<8;i++){
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='p'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='r'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='t'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='a'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='c'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='d'))
+    return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='p'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='r'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='t'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='a'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='c'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='d'))
+    return 0;
+    }
+    for(i=0;i<8;i++){
+    if((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)
+    return 1;
+    if((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)
+    return 1;
+    if((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)
+    return 1;
+    if((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)
+    return 1;
+    }
+    return 0;
+
+
+}
+int confirmar_caballo_negro(int i_inicial,int j_inicial,int i_final,int j_final)
+{
+
+    if(((i_inicial-2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='T'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='A'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='R'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='C'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='P'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='D'))
+        return 0;
+
+    if(((i_inicial-2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='T'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='A'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='R'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='C'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='P'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='D'))
+        return 0;
+
+    if(((i_inicial-1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='T'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='A'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='R'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='C'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='P'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='D'))
+        return 0;
+
+    if(((i_inicial-1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='T'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='A'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='R'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='C'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='P'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='D'))
+        return 0;
+
+    if(((i_inicial+2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='T'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='A'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='R'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='C'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='P'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='D'))
+        return 0;
+
+    if(((i_inicial+2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='T'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='A'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='R'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='C'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='P'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='D'))
+        return 0;
+
+     if(((i_inicial+1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='T'))
+        return 0;
+     if(((i_inicial+1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='A'))
+        return 0;
+     if(((i_inicial+1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='R'))
+        return 0;
+     if(((i_inicial+1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='C'))
+        return 0;
+     if(((i_inicial+1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='P'))
+        return 0;
+     if(((i_inicial+1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='D'))
+        return 0;
+
+    if(((i_inicial+1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='T'))
+        return 0;
+    if(((i_inicial+1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='A'))
+        return 0;
+    if(((i_inicial+1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='R'))
+        return 0;
+    if(((i_inicial+1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='C'))
+        return 0;
+    if(((i_inicial+1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='P'))
+        return 0;
+    if(((i_inicial+1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='D'))
+        return 0;
+
+    if((i_inicial-2)==i_final&&(j_inicial+1)==j_final)
+        return 1;
+    if((i_inicial-2)==i_final&&(j_inicial-1)==j_final)
+        return 1;
+    if((i_inicial-1)==i_final&&(j_inicial+2)==j_final)
+        return 1;
+    if((i_inicial-1)==i_final&&(j_inicial-2)==j_final)
+        return 1;
+
+    if((i_inicial+2)==i_final&&(j_inicial-1)==j_final)
+        return 1;
+    if((i_inicial+2)==i_final&&(j_inicial+1)==j_final)
+        return 1;
+    if((i_inicial+1)==i_final&&(j_inicial-2)==j_final)
+        return 1;
+    if((i_inicial+1)==i_final&&(j_inicial+2)==j_final)
+        return 1;
+    return 0;
+}
+int confirmar_caballo_blanco(int i_inicial,int j_inicial,int i_final,int j_final)
+{
+    if(((i_inicial-2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='t'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='a'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='r'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='c'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='p'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='d'))
+        return 0;
+
+    if(((i_inicial-2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='t'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='a'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='r'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='c'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='p'))
+        return 0;
+    if(((i_inicial-2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='d'))
+        return 0;
+
+    if(((i_inicial-1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='t'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='a'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='r'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='c'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='p'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='d'))
+        return 0;
+
+    if(((i_inicial-1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='t'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='a'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='r'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='c'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='p'))
+        return 0;
+    if(((i_inicial-1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='d'))
+        return 0;
+
+    if(((i_inicial+2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='t'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='a'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='r'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='c'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='p'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial-1)==j_final)&&(tablero[i_final][j_final]=='d'))
+        return 0;
+
+    if(((i_inicial+2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='t'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='a'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='r'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='c'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='p'))
+        return 0;
+    if(((i_inicial+2)==i_final&&(j_inicial+1)==j_final)&&(tablero[i_final][j_final]=='d'))
+        return 0;
+
+     if(((i_inicial+1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='t'))
+        return 0;
+     if(((i_inicial+1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='a'))
+        return 0;
+     if(((i_inicial+1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='r'))
+        return 0;
+     if(((i_inicial+1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='c'))
+        return 0;
+     if(((i_inicial+1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='p'))
+        return 0;
+     if(((i_inicial+1)==i_final&&(j_inicial-2)==j_final)&&(tablero[i_final][j_final]=='d'))
+        return 0;
+
+    if(((i_inicial+1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='t'))
+        return 0;
+    if(((i_inicial+1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='a'))
+        return 0;
+    if(((i_inicial+1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='r'))
+        return 0;
+    if(((i_inicial+1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='c'))
+        return 0;
+    if(((i_inicial+1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='p'))
+        return 0;
+    if(((i_inicial+1)==i_final&&(j_inicial+2)==j_final)&&(tablero[i_final][j_final]=='d'))
+        return 0;
+
+    if((i_inicial-2)==i_final&&(j_inicial+1)==j_final)
+        return 1;
+    if((i_inicial-2)==i_final&&(j_inicial-1)==j_final)
+        return 1;
+    if((i_inicial-1)==i_final&&(j_inicial+2)==j_final)
+        return 1;
+    if((i_inicial-1)==i_final&&(j_inicial-2)==j_final)
+        return 1;
+
+    if((i_inicial+2)==i_final&&(j_inicial-1)==j_final)
+        return 1;
+    if((i_inicial+2)==i_final&&(j_inicial+1)==j_final)
+        return 1;
+    if((i_inicial+1)==i_final&&(j_inicial-2)==j_final)
+        return 1;
+    if((i_inicial+1)==i_final&&(j_inicial+2)==j_final)
+        return 1;
+    return 0;
+}
+int confirmar_dama_blanca(int i_inicial,int j_inicial,int i_final,int j_final)
+{
+    int i;
+
+    for(i=1;i<8;i++){
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='p'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='r'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='t'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='a'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='c'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial-i)==j_final))&&(tablero[i_final][j_final]=='d'))
+        return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='p'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='r'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='t'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='a'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='c'))
+        return 0;
+    if(((i_inicial)==(i_final)&&((j_inicial+i)==j_final))&&(tablero[i_final][j_final]=='d'))
+        return 0;
+    }
+
+    for(i=1;i<8;i++){
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='p'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='r'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='t'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='a'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='c'))
+        return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='d'))
+        return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='p'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='r'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='t'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='a'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='c'))
+        return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial==j_final))&&(tablero[i_final][j_final]=='d'))
+        return 0;
+    }
+   for(i=1;i<8;i++){
+    if((i_inicial)==(i_final)&&((j_inicial-i)==j_final))
+        return 1;
+    if((i_inicial)==(i_final)&&((j_inicial+i)==j_final))
+        return 1;
+    if((i_inicial-i)==(i_final)&&((j_inicial)==j_final))
+        return 1;
+    if((i_inicial+i)==(i_final)&&((j_inicial)==j_final))
+        return 1;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='P'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='R'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='T'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='A'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='C'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='D'))
+    return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='P'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='R'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='T'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='A'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='C'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='D'))
+    return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='P'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='R'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='T'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='A'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='C'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='D'))
+    return 0;
+    }
+    for( i=1;i<8;i++){
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='P'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='R'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='T'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='A'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='C'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='D'))
+    return 0;
+    }
+    for(i=1;i<8;i++){
+    if((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)
+    return 1;
+    if((i_inicial+i)==i_final&&(j_inicial+i)==j_final)
+    return 1;
+    if((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)
+    return 1;
+    if((i_inicial-i)==i_final&&(j_inicial+i)==j_final)
+    return 1;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='p'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='r'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='t'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='a'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='c'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='d'))
+    return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='p'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='r'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='t'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='a'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='c'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='d'))
+    return 0;
+    }
+
+    for(i=1;i<8;i++){
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='p'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='r'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='t'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='a'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='c'))
+    return 0;
+    if(((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)&&(tablero[i_final][j_final]=='d'))
+    return 0;
+    }
+    for(i=1;i<8;i++){
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='p'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='r'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='t'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='a'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='c'))
+    return 0;
+    if(((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)&&(tablero[i_final][j_final]=='d'))
+    return 0;
+    }
+    for(i=0;i<8;i++){
+    if((i_inicial+i)==(i_final)&&(j_inicial+i)==j_final)
+    return 1;
+    if((i_inicial-i)==(i_final)&&(j_inicial-i)==j_final)
+    return 1;
+    if((i_inicial+i)==(i_final)&&(j_inicial-i)==j_final)
+    return 1;
+    if((i_inicial-i)==(i_final)&&(j_inicial+i)==j_final)
+    return 1;
+    }
+    return 0;
+}
+int confirmar_rey_blanco(int i_inicial,int j_inicial,int i_final,int j_final)
+{
+    if(((i_inicial+1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='a')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='p')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='c')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='d')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='t')))
+        return 0;
+
+    if(((i_inicial-1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='a')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='p')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='c')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='d')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='t')))
+        return 0;
+
+    if(((i_inicial)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='a')))
+        return 0;
+    if(((i_inicial)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='p')))
+        return 0;
+    if(((i_inicial)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='c')))
+        return 0;
+    if(((i_inicial)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='d')))
+        return 0;
+    if(((i_inicial)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='t')))
+        return 0;
+
+    if(((i_inicial)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='a')))
+        return 0;
+    if(((i_inicial)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='p')))
+        return 0;
+    if(((i_inicial)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='c')))
+        return 0;
+    if(((i_inicial)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='d')))
+        return 0;
+    if(((i_inicial)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='t')))
+        return 0;
+
+    if(((i_inicial-1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='a')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='p')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='c')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='d')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='t')))
+        return 0;
+        //
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='a')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='p')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='c')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='d')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='t')))
+        return 0;
+
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='a')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='p')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='c')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='d')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='t')))
+        return 0;
+
+    if(((i_inicial-1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='a')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='p')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='c')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='d')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='t')))
+        return 0;
+
+    if(((i_inicial+1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='a')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='p')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='c')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='d')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='t')))
+        return 0;
+
+
+    if( ((i_inicial+1)==i_final)&&(j_inicial==j_final))
+        return 1;
+    if( ((i_inicial-1)==i_final)&&(j_inicial==j_final))
+        return 1;
+    if( ((i_inicial)==i_final)&&((j_inicial+1)==j_final))
+        return 1;
+
+    if( ((i_inicial)==i_final)&&((j_inicial-1)==j_final))
+        return 1;
+
+    if( ((i_inicial-1)==i_final)&&((j_inicial-1)==j_final))
+        return 1;
+    if( ((i_inicial+1)==i_final)&&((j_inicial+1)==j_final))
+        return 1;
+    if( ((i_inicial-1)==i_final)&&((j_inicial+1)==j_final))
+        return 1;
+    if( ((i_inicial+1)==i_final)&&((j_inicial-1)==j_final))
+        return 1;
+    return 0;
+}
+int confirmar_rey_negro(int i_inicial,int j_inicial,int i_final,int j_final)
+{
+
+    if(((i_inicial+1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='A')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='P')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='C')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='D')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='T')))
+        return 0;
+
+    if(((i_inicial-1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='A')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='P')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='C')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='D')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='T')))
+        return 0;
+
+    if(((i_inicial)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='A')))
+        return 0;
+    if(((i_inicial)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='P')))
+        return 0;
+    if(((i_inicial)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='C')))
+        return 0;
+    if(((i_inicial)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='D')))
+        return 0;
+    if(((i_inicial)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='T')))
+        return 0;
+
+    if(((i_inicial)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='A')))
+        return 0;
+    if(((i_inicial)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='P')))
+        return 0;
+    if(((i_inicial)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='C')))
+        return 0;
+    if(((i_inicial)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='D')))
+        return 0;
+    if(((i_inicial)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='T')))
+        return 0;
+
+    if(((i_inicial-1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='A')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='P')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='C')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='D')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='T')))
+        return 0;
+
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='A')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='P')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='C')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='D')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='T')))
+        return 0;
+
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='A')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='P')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='C')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='D')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='T')))
+        return 0;
+
+    if(((i_inicial-1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='A')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='P')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='C')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='D')))
+        return 0;
+    if(((i_inicial-1)==i_final)&&((j_inicial+1)==j_final)&&((tablero[i_final][j_final]=='T')))
+        return 0;
+
+    if(((i_inicial+1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='A')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='P')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='C')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='D')))
+        return 0;
+    if(((i_inicial+1)==i_final)&&((j_inicial-1)==j_final)&&((tablero[i_final][j_final]=='T')))
+        return 0;
+    if( ((i_inicial+1)==i_final)&&(j_inicial==j_final))
+        return 1;
+    if( ((i_inicial-1)==i_final)&&(j_inicial==j_final))
+        return 1;
+    if( ((i_inicial)==i_final)&&((j_inicial+1)==j_final))
+        return 1;
+    if( ((i_inicial)==i_final)&&((j_inicial-1)==j_final))
+        return 1;
+
+    if( ((i_inicial-1)==i_final)&&((j_inicial-1)==j_final))
+        return 1;
+    if( ((i_inicial+1)==i_final)&&((j_inicial+1)==j_final))
+        return 1;
+    if( ((i_inicial-1)==i_final)&&((j_inicial+1)==j_final))
+        return 1;
+    if( ((i_inicial+1)==i_final)&&((j_inicial-1)==j_final))
+        return 1;
+    return 0;
 }
 int confirmar_peon_blanco(int i_inicial,int j_inicial,int i_final,int j_final)
 {
-    int aux=i_inicial+1;
-    if((aux)==(i_final))
+
+    int aux=i_inicial+1,aux2=i_inicial+2;
+    if((aux)==(i_final)&&(j_inicial==j_final)&&(i_final==7))
+        return -1;
+    if((tablero[i_final][j_final]=='A')&&((i_inicial+1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final)&&(i_final==7))
+    return -1;
+    if((tablero[i_final][j_final]=='D')&&((i_inicial+1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final)&&(i_final==7))
+    return -1;
+    if((tablero[i_final][j_final]=='C')&&((i_inicial+1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final)&&(i_final==7))
+    return -1;
+    if((tablero[i_final][j_final]=='T')&&((i_inicial+1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final)&&(i_final==7))
+    return -1;
+
+    if((tablero[i_final][j_final]=='P')&&((i_inicial+1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final))
         return 1;
+     if((tablero[i_final][j_final]=='A')&&((i_inicial+1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final))
+        return 1;
+     if((tablero[i_final][j_final]=='C')&&((i_inicial+1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final))
+        return 1;
+     if((tablero[i_final][j_final]=='R')&&((i_inicial+1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final))
+        return 1;
+     if((tablero[i_final][j_final]=='D')&&((i_inicial+1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final))
+        return 1;
+     if((tablero[i_final][j_final]=='T')&&((i_inicial+1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final))
+        return 1;
+
+
+    if((aux)==(i_final)&&(j_inicial==j_final))
+        return 1;
+
+    if ((i_inicial==1)&&(aux2==i_final)&&(j_inicial==j_final))
+        return 1;
+
     return 0;
 }
 int confirmar_peon_negro(int i_inicial,int j_inicial,int i_final,int j_final)
 {
-    int aux=i_inicial-1;
-    if((aux)==(i_final))
+    int aux=i_inicial-1,aux2=i_inicial-2;
+    if((aux)==(i_final)&&(j_inicial==j_final)&&(i_final==0))
+        return -1;
+    if((tablero[i_final][j_final]=='a')&&((i_inicial-1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final)&&(i_final==0))
+    return -1;
+    if((tablero[i_final][j_final]=='d')&&((i_inicial-1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final)&&(i_final==0))
+    return -1;
+    if((tablero[i_final][j_final]=='c')&&((i_inicial-1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final)&&(i_final==0))
+    return -1;
+    if((tablero[i_final][j_final]=='t')&&((i_inicial-1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final)&&(i_final==0))
+    return -1;
+
+    if((tablero[i_final][j_final]=='p')&&((i_inicial-1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final))
+        return 1;
+     if((tablero[i_final][j_final]=='a')&&((i_inicial-1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final))
+        return 1;
+     if((tablero[i_final][j_final]=='c')&&((i_inicial-1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final))
+        return 1;
+     if((tablero[i_final][j_final]=='r')&&((i_inicial-1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final))
+        return 1;
+     if((tablero[i_final][j_final]=='d')&&((i_inicial-1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final))
+        return 1;
+     if((tablero[i_final][j_final]=='t')&&((i_inicial-1)==i_final) &&(((j_inicial-1)==j_final)||(j_inicial+1)==j_final))
+        return 1;
+    if((aux)==(i_final)&&(j_inicial==j_final))
+        return 1;
+    if ((i_inicial==6)&&(aux2)==(i_final)&&(j_inicial==j_final))
         return 1;
     return 0;
 }
-
 void imprimir_jugador(int turno)
 {
         if (turno == 0)
@@ -128,13 +1368,15 @@ void posicion_inicial()
     tablero[7][7]='T';
 
     tablero[0][5]='a';
-    tablero[0][1]='a';
-    tablero[7][5]='A';
-    tablero[7][1]='A';
+    tablero[0][1]='c';
 
-    tablero[0][2]='c';
+    tablero[7][5]='A';
+    tablero[7][1]='C';
+
+    tablero[0][2]='a';
     tablero[0][6]='c';
-    tablero[7][2]='C';
+
+    tablero[7][2]='A';
     tablero[7][6]='C';
 
     tablero[0][3]='d';
