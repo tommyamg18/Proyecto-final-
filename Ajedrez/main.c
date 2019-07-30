@@ -4,7 +4,7 @@ char tablero[8][8];
 void posicion_inicial();
 void juego();
 void imprimir_tablero();
-int validar_(int i_inicial,int j_inicial,int i_final,int j_final);
+int validar_(int i_inicial,int j_inicial,int i_final,int j_final,int turno);
 void imprimir_jugador(int turno);
 void leer_jugada(int *i_inicial, int *j_inicial,int *i_final,int *j_final,char turno);
 void mover_pieza(int i_inicial, int j_inicial, int i_final, int j_final);
@@ -40,6 +40,12 @@ int cal_arriba_blancas(int i_inicial,int j_inicial);
 int cal_abajo_blancas(int i_inicial,int j_inicial);
 
 int lee_ganador();
+
+int contador_movi_rey_blanco=0;
+int contador_movi_torre_blanco=0;
+
+int contador_movi_rey_negro=0;
+int contador_movi_torre_negro=0;
 int main()
 {
     posicion_inicial();
@@ -55,7 +61,7 @@ void juego()
         imprimir_tablero();
         imprimir_jugador(turno);
         leer_jugada(&i_inicial,&j_inicial,&i_final,&j_final,turno);
-        aux=validar_(i_inicial,j_inicial,i_final,j_final);
+        aux=validar_(i_inicial,j_inicial,i_final,j_final,turno);
         if(aux==1)
         {
             mover_pieza(i_inicial,j_inicial,i_final,j_final);
@@ -106,52 +112,54 @@ void juego()
     }
     while(turno!=2);
 }
-int validar_(int i_inicial,int j_inicial,int i_final,int j_final)
+
+int validar_(int i_inicial,int j_inicial,int i_final,int j_final,int turno)
 {
     if((i_inicial>7)||(i_inicial<0)||(j_inicial>7)||(j_inicial<0)||(i_final>7)|| (i_final<0)||(j_final>7)||(j_final<0))
         return 0;
-    if(tablero[i_inicial][j_inicial]=='d')
+    if((tablero[i_inicial][j_inicial]=='d')&&(turno==0))
         return confirmar_dama_blanca(i_inicial,j_inicial,i_final,j_final);
 
-    if(tablero[i_inicial][j_inicial]=='D')
+    if((tablero[i_inicial][j_inicial]=='D')&&(turno==1))
         return confirmar_dama_negra(i_inicial,j_inicial,i_final,j_final);
 
-    if(tablero[i_inicial][j_inicial]=='t')
+    if((tablero[i_inicial][j_inicial]=='t')&&(turno==0))
         return confirmar_torre_blanca(i_inicial,j_inicial,i_final,j_final);
 
-    if(tablero[i_inicial][j_inicial]=='T')
+    if((tablero[i_inicial][j_inicial]=='T')&&(turno==1))
         return confirmar_torre_negra(i_inicial,j_inicial,i_final,j_final);
 
-    if(tablero[i_inicial][j_inicial]=='A')
+    if((tablero[i_inicial][j_inicial]=='A')&&(turno==1))
         return confirmar_alfil_negro(i_inicial,j_inicial,i_final,j_final);
 
-    if(tablero[i_inicial][j_inicial]=='a')
+    if((tablero[i_inicial][j_inicial]=='a')&&(turno==0))
         return confirmar_alfil_blanco(i_inicial,j_inicial,i_final,j_final);
 
 
-    if(tablero[i_inicial][j_inicial]=='c')
+    if((tablero[i_inicial][j_inicial]=='c')&&(turno==0))
         return confirmar_caballo_blanco(i_inicial,j_inicial,i_final,j_final);
 
-    if(tablero[i_inicial][j_inicial]=='C')
+    if((tablero[i_inicial][j_inicial]=='C')&&(turno==1))
         return confirmar_caballo_negro(i_inicial,j_inicial,i_final,j_final);
 
 
 
-    if(tablero[i_inicial][j_inicial]=='r')
+    if((tablero[i_inicial][j_inicial]=='r')&&(turno==0))
         return confirmar_rey_blanco(i_inicial,j_inicial,i_final,j_final);
 
-    if(tablero[i_inicial][j_inicial]=='R')
+    if((tablero[i_inicial][j_inicial]=='R')&&(turno==1))
         return confirmar_rey_negro(i_inicial,j_inicial,i_final,j_final);
 
 
-    if(tablero[i_inicial][j_inicial]=='p')
+    if((tablero[i_inicial][j_inicial]=='p')&&(turno==0))
         return confirmar_peon_blanco(i_inicial,j_inicial,i_final,j_final);
 
-    if(tablero[i_inicial][j_inicial]=='P')
+    if((tablero[i_inicial][j_inicial]=='P')&&(turno==1))
         return confirmar_peon_negro(i_inicial,j_inicial,i_final,j_final);
     return 0;
 
 }
+
 int confirmar_dama_negra(int i_inicial,int j_inicial,int i_final,int j_final)
 {
     int i,arriba,abajo,izq,dere;
@@ -605,6 +613,38 @@ int cal_arriba_negras(int i_inicial,int j_inicial)
             return i+1;
     }
     return i;
+}
+void enroque_corto_blanco()
+{
+    tablero[0][0]='.';
+    tablero[0][1]='r';
+    tablero[0][2]='t';
+    tablero[0][4]='.';
+
+}
+void enroque_largo_blanco()
+{
+    tablero[0][7]='.';
+    tablero[0][6]='.';
+    tablero[0][5]='r';
+    tablero[0][4]='t';
+
+}
+void enroque_corto_negro()
+{
+    tablero[7][0]='.';
+    tablero[7][1]='R';
+    tablero[7][2]='T';
+    tablero[7][4]='.';
+
+}
+void enroque_largo_negro()
+{
+    tablero[7][7]='.';
+    tablero[7][6]='.';
+    tablero[7][5]='R';
+    tablero[7][4]='T';
+
 }
 int confirmar_torre_blanca(int i_inicial,int j_inicial,int i_final,int j_final)
 {
@@ -1671,6 +1711,10 @@ int confirmar_dama_blanca(int i_inicial,int j_inicial,int i_final,int j_final)
 }
 int confirmar_rey_blanco(int i_inicial,int j_inicial,int i_final,int j_final)
 {
+     if((contador_movi_torre_blanco==0)&&(tablero[0][1]=='.')&&(tablero[0][2]=='.')&&(contador_movi_rey_blanco==0)&&(i_final==0)&&(j_final==1))
+        enroque_corto_blanco();
+    if((contador_movi_torre_blanco==0)&&(tablero[0][6]=='.')&&(tablero[0][5]=='.')&&(tablero[0][4]=='.')&&(contador_movi_rey_blanco==0)&&(i_final==0)&&(j_final==5))
+        enroque_largo_blanco();
     if(((i_inicial+1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='a')))
         return 0;
     if(((i_inicial+1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='p')))
@@ -1793,6 +1837,11 @@ int confirmar_rey_blanco(int i_inicial,int j_inicial,int i_final,int j_final)
 }
 int confirmar_rey_negro(int i_inicial,int j_inicial,int i_final,int j_final)
 {
+     if((contador_movi_torre_negro==0)&&(tablero[7][1]=='.')&&(tablero[7][2]=='.')&&(contador_movi_rey_negro==0)&&(i_final==7)&&(j_final==1))
+        enroque_corto_negro();
+    if((contador_movi_torre_negro==0)&&(tablero[7][6]=='.')&&(tablero[7][5]=='.')&&(tablero[7][4]=='.')&&(contador_movi_rey_negro==0)&&(i_final==7)&&(j_final==5))
+        enroque_largo_negro();
+
 
     if(((i_inicial+1)==i_final)&&(j_inicial==j_final)&&((tablero[i_final][j_final]=='A')))
         return 0;
@@ -1994,9 +2043,9 @@ void leer_jugada(int *i_inicial, int *j_inicial,int *i_final,int *j_final,char t
     scanf("%s", desde);
     scanf("%s", hasta);
 
-    *j_inicial = desde[0] - 'a';
+    *j_inicial = 'h' - desde[0];
     *i_inicial = desde[1] - '1';
-    *j_final   = hasta[0] - 'a';
+    *j_final   = 'h' - hasta[0];
     *i_final   = hasta[1] - '1';
 
 
@@ -2004,11 +2053,27 @@ void leer_jugada(int *i_inicial, int *j_inicial,int *i_final,int *j_final,char t
 void mover_pieza(int i_inicial, int j_inicial, int i_final, int j_final)
 {
     tablero[i_final][j_final] = tablero[i_inicial][j_inicial];
-    tablero[i_inicial][j_inicial] = '.';
+    tablero[i_inicial][j_inicial] ='.';
+
+    if(tablero[i_inicial][j_inicial] =='r')
+        contador_movi_rey_blanco++;
+    if(tablero[i_inicial][j_inicial] =='R')
+        contador_movi_rey_negro++;
+    if(tablero[i_inicial][j_inicial] =='t')
+        contador_movi_torre_blanco++;
+    if(tablero[i_inicial][j_inicial] =='T')
+        contador_movi_rey_negro++;
 }
 void imprimir_tablero()
 {
     printf("\n");
+        printf("   ");
+    for(int f=0; f<8; f++)
+    {
+        printf(" %c  ", 'h' - f);
+    }
+
+      printf("\n");
     printf("  +-------------------------------+\n");
     for(int i=0; i<8; i++)
     {
@@ -2024,11 +2089,7 @@ void imprimir_tablero()
         printf("\n");
     }
     printf("  +-------------------------------+\n");
-    printf("   ");
-    for(int f=0; f<8; f++)
-    {
-        printf(" %c  ", 'a' + f);
-    }
+
 
     printf("\n");
 }
@@ -2051,11 +2112,11 @@ void posicion_inicial()
     tablero[7][2]='A';
     tablero[7][6]='C';
 
-    tablero[0][3]='d';
-    tablero[0][4]='r';
+    tablero[0][3]='r';
+    tablero[0][4]='d';
 
-    tablero[7][4]='R';
-    tablero[7][3]='D';
+    tablero[7][4]='D';
+    tablero[7][3]='R';
 
     tablero[1][0]='p';
     tablero[1][1]='p';
