@@ -1,7 +1,23 @@
 #include <stdio.h>
 #include <ctype.h>
+#include<stdlib.h>
+#include<conio.h>
+typedef struct jugador{
+    char *nombre;
+    int partidas_ganadas;
+    int partidas_perdidas;
+    float promedio;
+}player;
+player jugadores[100];
+int n_jugadores=0;
 char tablero[8][8];
+int agregar_jugador();
+void score();
+void juego_nombre();
+char *leer_string();
+void inicializar_arreglo();
 void posicion_inicial();
+void menu();
 void juego();
 void imprimir_tablero();
 int validar_(int i_inicial,int j_inicial,int i_final,int j_final,int turno);
@@ -48,8 +64,138 @@ int contador_movi_rey_negro=0;
 int contador_movi_torre_negro=0;
 int main()
 {
+    inicializar_arreglo();
     posicion_inicial();
-    juego();
+    menu();
+
+}
+void menu()
+{
+    printf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ \n ");
+    printf("\\\\                                              \\\\\n");
+    printf("\\\\         BIENVENIDO AL AJEDREZ                \\\\\n");
+    printf("\\\\   Menu:                                      \\\\\n");
+    printf("\\\\   A)Partida Rapida.                          \\\\\n");
+    printf("\\\\   B)Partidas Toneo.                          \\\\\n");
+    printf("\\\\   C)Mejores 100.                             \\\\\n");
+    printf("\\\\   D)Continuar Partidas                       \\\\\n");
+    printf("\\\\   E)Agregar jugador.                         \\\\\n");
+    printf("\\\\                                              \\\\\n");
+    printf("\\\\                                              \\\\\n");
+    printf("\\\\                                              \\\\\n");
+    printf("\\\\                                              \\\\\n");
+    printf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ \n ");
+    char x;
+    scanf(" %c",&x);
+    system("cls");
+    switch(x)
+    {
+    case 'a':
+        {
+            juego();
+            break;
+        }
+    case 'b':
+        {
+            juego_nombre();
+            break;
+
+        }
+    case 'c':
+        {
+            score();
+            break;
+
+        }
+    case 'd':
+        {
+            juego();
+            break;
+
+
+        }
+    case 'e':
+        {
+            agregar_jugador();
+            break;
+
+        }
+
+    }
+}
+int agregar_jugador()
+{
+    system("cls");
+    printf("Digite el nombre del jugador \n");
+    scanf("%s",jugadores[n_jugadores].nombre);
+    guardar_archivo_texto(jugadores,n_jugadores);
+    printf("Jugador registrado \n");
+    system("pause");
+    system("cls");
+    n_jugadores++;
+    menu();
+
+}
+void juego_nombre()
+{
+    int i_inicial, j_inicial,turno=0;
+    int i_final,j_final,aux,ganar;
+    char help;
+    do
+    {
+        imprimir_tablero();
+        imprimir_jugador(turno);
+        leer_jugada(&i_inicial,&j_inicial,&i_final,&j_final,turno);
+        aux=validar_(i_inicial,j_inicial,i_final,j_final,turno);
+        if(aux==1)
+        {
+            mover_pieza(i_inicial,j_inicial,i_final,j_final);
+            ganar=lee_ganador();
+            if(ganar==1)
+                turno=2;
+            if(ganar==0)
+                turno=1-turno;
+
+        }
+        else if((aux==-1)&&(turno==0))
+        {
+            do
+            {
+                printf("\nDigite la pieza por la que desea sustituir \n");
+                scanf(" %c",&help);
+                if(help=='t'||help=='c'||help=='a'||help=='r'||help=='d'||help=='c')
+                {
+                    tablero[i_final][j_final]=help;
+                    turno=1-turno;
+                    break;
+                }
+            }
+            while(help!='t'||help!='c'||help!='a'||help!='r'||help!='d'||help!='c');
+
+        }
+        else if((aux==-1)&&(turno==1))
+        {
+            do
+            {
+                printf("\nDigite la pieza por la que desea sustituir \n");
+                scanf(" %c",&help);
+                if(help=='T'||help=='C'||help=='A'||help=='R'||help=='D')
+                {
+                    tablero[i_final][j_final]=help;
+                    turno=1-turno;
+                    break;
+                }
+            }
+            while(help!='T'||help!='C'||help!='A'||help!='R'||help!='D');
+
+        }
+        else if(aux==0)
+        {
+            printf("\njugada no valida");
+        }
+
+    }
+    while(turno!=2);
 }
 void juego()
 {
@@ -2144,9 +2290,10 @@ void posicion_inicial()
     }
 
 }
-int lee_ganador()
+int lee_ganador(int i_negro,int i_blanco)
 {
     int rb=0,rn=0;
+    char x;
     for(int i=0; i<8; i++)
     {
         for(int j=0; j<8; j++)
@@ -2160,12 +2307,238 @@ int lee_ganador()
     if(rb>rn)
     {
         printf("\nBlancas Gana");
+        printf("pause");
+        system("cls");
+        printf("Digite 1 volver al menu");
+        printf("Digite cualquier otra tecla para salir del juego");
+        scanf(" %c",&x);
+        if (x=='1')
+            menu();
         return 1;
     }
     if(rn>rb)
     {
-        printf("\nNegras Gana");
+        printf("\nNegro Gana");
+        printf("pause");
+        system("cls");
+        printf("Digite 1 volver al menu");
+        printf("Digite cualquier otra tecla para salir del juego");
+        scanf(" %c",&x);
+        if (x=='1')
+            menu();
+
         return 1;
     }
     return 0;
+}
+int lee_ganador_jugadores(int i_negro,int i_blanco)
+{
+    int rb=0,rn=0;
+    char x;
+    for(int i=0; i<8; i++)
+    {
+        for(int j=0; j<8; j++)
+        {
+            if (tablero[j][i]=='r')
+                rb++;
+            if (tablero[j][i]=='R')
+                rn++;
+        }
+    }
+    if(rb>rn)
+    {
+        printf("\n%s Gana",jugadores[i_blanco].nombre);
+        jugadores[i_blanco].partidas_ganadas=++(jugadores[i_blanco].partidas_ganadas);
+        printf("pause");
+        system("cls");
+        printf("Digite 1 volver al menu");
+        printf("Digite cualquier otra tecla para salir del juego");
+        scanf(" %c",&x);
+        if (x=='1')
+            menu();
+        printf("Digite cualquier otra tecla para salir del juego");
+        return 1;
+    }
+    if(rn>rb)
+    {
+        printf("\n%s Gana");
+        jugadores[i_negro].partidas_ganadas=++(jugadores[i_negro].partidas_ganadas);
+
+        printf("pause");
+        system("cls");
+        printf("Digite 1 volver al menu");
+        printf("Digite cualquier otra tecla para salir del juego");
+        scanf(" %c",&x);
+        if (x=='1')
+            menu();
+
+        return 1;
+    }
+    return 0;
+}
+void leer_jugador(int n_jugadores,player jugadores[100])
+{
+    printf("\n");
+    printf("Digite el nombre del Jugador");
+    printf("\n");
+    jugadores[n_jugadores].nombre=leer_string();
+    guardar_archivo_texto(jugadores,n_jugadores);
+}
+
+int leer_archivo_texto(player jugadores[100])
+{
+    FILE * f,*p,*p1,*p2,*p3;
+    char buff[500];
+    int i;
+    f = fopen("n_jugadores.txt", "r");
+    p = fopen("nombre.txt", "r");
+    p1 = fopen("ganadas.txt", "r");
+    p2 = fopen("perdidas.txt","r");
+    p3 = fopen("Promedio.txt", "r");
+     if (f==NULL){
+        return 0;
+    }
+    if (p==NULL){
+        return 0;
+    }
+     if (p1==NULL){
+        return 0;
+    }
+     if (p2==NULL){
+        return 0;
+    }
+     if (p3==NULL){
+        return 0;
+    }
+    fgets(buff,1024,f);
+    n_jugadores=atoi(buff);
+
+    for(i=0;i<n_jugadores;i++)
+    {
+        fgets(jugadores[i].nombre,1024,p);
+        fgets(buff,1024,p1);
+        jugadores[i].partidas_ganadas=atoi(buff);
+        fgets(buff,1024,p2);
+        jugadores[i].partidas_perdidas=atoi(buff);
+        fgets(buff,1024,p3);
+        jugadores[i].promedio=atof(buff);
+    }
+
+   return 1;
+}
+int numero_De_jugadores()
+{
+    FILE * p;
+    p = fopen("n_jugadores.txt", "w");
+    if (p==NULL){
+        return 0;
+    }
+    fprintf(p,"%d", n_jugadores);
+    fclose(p);
+    return 1;
+
+
+}
+void score()
+{
+    cal_promedio();
+    for(int i=0;i<n_jugadores;i++)
+        {
+            if (jugadores[i].promedio<(jugadores[i+1].promedio))
+                suap(jugadores[i],jugadores[i+1]);
+        }
+    printf("\nLos Mejores Score son: \n");
+    for(int j=0;j<n_jugadores;j++)
+    {
+       printf("%s",jugadores[j].nombre);
+       printf("%d",jugadores[j].partidas_ganadas);
+       printf("%d",jugadores[j].partidas_perdidas);
+       printf("%.2f",jugadores[j].promedio);
+
+    }
+
+}
+void cal_promedio()
+{
+    for(int i=0;i<n_jugadores;i++)
+        {
+            jugadores[i].promedio=jugadores[i].partidas_ganadas/(jugadores[i].partidas_perdidas+jugadores[i].partidas_ganadas);
+        }
+}
+void suap(player jugador,player jugador2)
+{
+    player aux;
+    aux.nombre=jugador.nombre;
+    jugador.nombre=jugador2.nombre;
+    jugador2.nombre=aux.nombre;
+
+    aux.partidas_ganadas=jugador.partidas_ganadas;
+    jugador.partidas_ganadas=jugador2.partidas_ganadas;
+    jugador2.partidas_ganadas=aux.partidas_ganadas;
+
+
+    aux.partidas_perdidas=jugador.partidas_perdidas;
+    jugador.partidas_perdidas=jugador2.partidas_perdidas;
+    jugador2.partidas_perdidas=aux.partidas_perdidas;
+
+
+    aux.promedio=jugador.promedio;
+    jugador.promedio=jugador2.promedio;
+    jugador2.promedio=aux.promedio;
+}
+int guardar_archivo_texto(player jugadores[100],int i)
+{
+    FILE * p,*p1,*p2,*p3;
+    char *buff;
+    buff=(char*)malloc(500*sizeof(char));
+    p = fopen("nombre.txt", "a+t");
+    p1 = fopen("ganadas.txt", "a+t");
+    p2 = fopen("perdidas.txt", "a+t");
+    p3 = fopen("Promedio.txt", "a+t");
+    if (p==NULL){
+        return 0;
+    }
+    buff=jugadores[i].nombre;
+    fputs(buff,p);
+    itoa(jugadores[i].partidas_ganadas,buff,1000);
+    fputs(buff,p1);
+    itoa(jugadores[i].partidas_perdidas,buff,1000);
+    fputs(buff,p2);
+    itoa(jugadores[i].promedio,buff,1000);
+    fputs(buff,p3);
+    fclose(p);
+    fclose(p1);
+    fclose(p2);
+    fclose(p3);
+    return 1;
+}
+char *leer_string()
+{
+    char *nom;
+    printf("\n");
+    char c=0;
+    int i=0;
+    nom = (char *) malloc(1 * sizeof(char));
+    *nom = '\0';
+    while ((c=getch())!='\r')
+    {
+        printf("%c",c);
+        nom = (char*) realloc(nom, (i+2)*sizeof(char));
+        nom[i++] = c;
+        nom[i]='\0';
+    }
+    printf("\n");
+    return(nom);
+}
+void inicializar_arreglo()
+{
+    for(int i=0;i<100;i++)
+    {
+         jugadores[i].partidas_ganadas=0;
+         jugadores[i].partidas_perdidas=0;
+
+    }
+    leer_archivo_texto(jugadores);
+
+    return 1;
 }
