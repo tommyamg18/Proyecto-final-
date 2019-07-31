@@ -1,0 +1,50 @@
+# depslib dependency file v1.0
+1564603924 source:c:\users\lenovo\pycharmprojects\proyecto-final-\ajedrez\funciones.c
+	"funciones.h"
+
+1564603924 c:\users\lenovo\pycharmprojects\proyecto-final-\ajedrez\funciones.h
+	<stdio.h>
+	<ctype.h>
+	<stdlib.h>
+	<string.h>
+	<conio.h>
+
+1564604644 source:c:\users\lenovo\pycharmprojects\proyecto-final-\minunit_ajedrez\main.c
+	"../../tarea1-1/tarea1_1/tarea1_100/minunit_tarea1_100/minunit.h"
+	"../Ajedrez/funciones.h"
+
+1560696051 c:\users\lenovo\pycharmprojects\tarea1-1\tarea1_1\tarea1_100\minunit_tarea1_100\minunit.h
+	<Windows.h>
+	<unistd.h>
+	<time.h>
+	<sys/time.h>
+	<sys/resource.h>
+	<sys/times.h>
+	<string.h>
+	<mach/mach.h>
+	<mach/mach_time.h>
+	<stdio.h>
+	<math.h>
+	<Windows.h>
+	<unistd.h>
+	<time.h>
+	<sys/time.h>
+	<sys/resource.h>
+	<sys/times.h>
+	<string.h>
+	<mach/mach.h>
+	<mach/mach_time.h>
+	<stdio.h>
+	<math.h>
+	<Windows.h>
+	<unistd.h>
+	<time.h>
+	<sys/time.h>
+	<sys/resource.h>
+	<sys/times.h>
+	<string.h>
+	<mach/mach.h>
+	<mach/mach_time.h>
+	<stdio.h>
+	<math.h>
+

@@ -1,7 +1,19 @@
 # depslib dependency file v1.0
-1564601217 source:c:\users\lenovo\pycharmprojects\proyecto-final-\ajedrez\main.c
+1564603685 source:c:\users\lenovo\pycharmprojects\proyecto-final-\ajedrez\main.c
 	<stdio.h>
 	<ctype.h>
 	<stdlib.h>
+	<string.h>
 	<conio.h>
+	"funciones.h"
+
+1564603924 c:\users\lenovo\pycharmprojects\proyecto-final-\ajedrez\funciones.h
+	<stdio.h>
+	<ctype.h>
+	<stdlib.h>
+	<string.h>
+	<conio.h>
+
+1564603924 source:c:\users\lenovo\pycharmprojects\proyecto-final-\ajedrez\funciones.c
+	"funciones.h"
 
